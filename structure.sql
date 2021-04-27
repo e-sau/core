@@ -5,11 +5,14 @@ CREATE TABLE IF NOT EXISTS `user` (
   `last_name` CHAR(255) DEFAULT NULL COMMENT 'User''s or bot''s last name',
   `username` CHAR(191) DEFAULT NULL COMMENT 'User''s or bot''s username',
   `language_code` CHAR(10) DEFAULT NULL COMMENT 'IETF language tag of the user''s language',
+  `last_callback_query_id` bigint NULL,
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update',
 
   PRIMARY KEY (`id`),
   KEY `username` (`username`)
+
+  FOREIGN KEY (`last_callback_query_id`) REFERENCES `callback_query` (`id`),
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 CREATE TABLE IF NOT EXISTS `chat` (

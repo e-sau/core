@@ -561,6 +561,8 @@ class DB
             $chosen_inline_result_id = self::$pdo->lastInsertId();
         } elseif (($callback_query = $update->getCallbackQuery()) && self::insertCallbackQueryRequest($callback_query)) {
             $callback_query_id = $callback_query->getId();
+
+            self::update(TB_USER, ['last_callback_query_id' => $callback_query_id], ['user_id' => $message->getFrom()->getId()]);
         } elseif (($shipping_query = $update->getShippingQuery()) && self::insertShippingQueryRequest($shipping_query)) {
             $shipping_query_id = $shipping_query->getId();
         } elseif (($pre_checkout_query = $update->getPreCheckoutQuery()) && self::insertPreCheckoutQueryRequest($pre_checkout_query)) {
