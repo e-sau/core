@@ -572,7 +572,7 @@ class DB
         } elseif (($my_chat_member = $update->getMyChatMember()) && self::insertChatMemberUpdatedRequest($my_chat_member)) {
             $my_chat_member_updated_id = self::$pdo->lastInsertId();
 
-            if (!$my_chat_member->getNewChatMember()->getIsMember()) {
+            if ('kicked' === $my_chat_member->getNewChatMember()->getStatus()) {
                 self::update(TB_USER, ['active' => 0], ['id' => $my_chat_member->getFrom()->getId()]);
             }
         } elseif (($chat_member = $update->getChatMember()) && self::insertChatMemberUpdatedRequest($chat_member)) {
