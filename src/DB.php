@@ -561,8 +561,6 @@ class DB
             $chosen_inline_result_id = self::$pdo->lastInsertId();
         } elseif (($callback_query = $update->getCallbackQuery()) && self::insertCallbackQueryRequest($callback_query)) {
             $callback_query_id = $callback_query->getId();
-
-            self::update(TB_USER, ['last_callback_query_id' => (int) $callback_query_id], ['id' => $callback_query->getFrom()->getId()]);
         } elseif (($shipping_query = $update->getShippingQuery()) && self::insertShippingQueryRequest($shipping_query)) {
             $shipping_query_id = $shipping_query->getId();
         } elseif (($pre_checkout_query = $update->getPreCheckoutQuery()) && self::insertPreCheckoutQueryRequest($pre_checkout_query)) {
@@ -573,6 +571,10 @@ class DB
             $poll_answer_poll_id = $poll_answer->getPollId();
         } elseif (($my_chat_member = $update->getMyChatMember()) && self::insertChatMemberUpdatedRequest($my_chat_member)) {
             $my_chat_member_updated_id = self::$pdo->lastInsertId();
+
+            if (!$my_chat_member->getNewChatMember()->getIsMember()) {
+                self::update(TB_USER, ['active' => 0], ['id' => $my_chat_member->getFrom()->getId()]);
+            }
         } elseif (($chat_member = $update->getChatMember()) && self::insertChatMemberUpdatedRequest($chat_member)) {
             $chat_member_updated_id = self::$pdo->lastInsertId();
         } else {
